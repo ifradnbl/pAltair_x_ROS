@@ -23,6 +23,7 @@ class TelemetryPublisher(Node):
             'elapsed_s': round(t, 1),
         }
         self.pub.publish(String(data=json.dumps(data)))
+        self.get_logger().info(f"Published: {data}")
 
 def main():
     rclpy.init()

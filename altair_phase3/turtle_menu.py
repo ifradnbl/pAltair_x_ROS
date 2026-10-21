@@ -1,4 +1,4 @@
-import math, threading, queue, time
+import math, threading, queue, time, os, os
 import rclpy
 from rclpy.node import Node
 from geometry_msgs.msg import Twist
@@ -73,5 +73,12 @@ def main():
             rclpy.spin_once(n, timeout_sec=0.1)
     except KeyboardInterrupt:
         pass
+    try:
+        n.send(0.0, 0.0)
+        time.sleep(0.2)
+    except Exception:
+        pass
     n.destroy_node()
     rclpy.try_shutdown()
+    print('Stopped and closed.', flush=True)
+    os._exit(0)

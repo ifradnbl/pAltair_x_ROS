@@ -30,7 +30,8 @@ class Mission(Node):
         if msg.data and self.state == 'RUNNING':
             self.state = 'PAUSED'
             self.get_logger().warn('Route BLOCKED -> PAUSED')
-        elif not msg.data:
+        elif not msg.data and self.state == 'PAUSED':
+            # Clearing the flag NEVER changes state: only /resume_mission can set RUNNING.
             self.get_logger().info('Report cleared. Still PAUSED until /resume_mission.')
 
     def on_resume(self, req, res):
@@ -75,7 +76,7 @@ class Mission(Node):
         if abs(err) > 0.3:
             self.send(0.0, max(-3.0, min(3.0, 4.0 * err)))
         else:
-            self.send(min(2.0, 1.5 * d), max(-3.0, min(3.0, 4.0 * err)))
+            self.send(min(1.0, 1.0 * d), max(-3.0, min(3.0, 4.0 * err)))
 
 def main():
     rclpy.init()
